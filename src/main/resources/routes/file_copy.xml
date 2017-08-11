@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+       ">
+
+    <routeContext id="file_copy"
+                  xmlns="http://camel.apache.org/schema/spring">
+        <route>
+            <from uri="file:in_folder?noop=true charset=utf-8"/>
+            <process ref="copyProcessor"/>
+            <choice >
+                <when>
+                    <xpath>//genre ='Computer'</xpath>
+                    <to uri="file:out_folder//Computer" />
+                </when>
+                <when>
+                    <xpath>//genre ='Fantasy'</xpath>
+                    <to uri="file:out_folder\Fantasy" />
+                </when>
+                <when>
+                    <xpath>//genre ='Science Fiction'</xpath>
+                    <to uri="file:out_folder\ScienceFiction" />
+                </when>
+                <otherwise>
+                    <to uri="file:out_folder\Other" />
+                </otherwise>
+            </choice>
+        </route>
+    </routeContext>
+
+</beans>
